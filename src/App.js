@@ -4,8 +4,8 @@ import {Button, Form, Modal, ProgressBar} from "react-bootstrap";
 import Papa from "papaparse";
 import Axios from 'axios'
 
-const api_url = process.env.API_URL
-const batchSize = process.env.BATCH_SIZE
+const api_url = "https://emailsender-api.herokuapp.com/mail"
+const batchSize = 100
 
 function App() {
 

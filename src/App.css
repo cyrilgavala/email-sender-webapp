@@ -65,6 +65,10 @@
   backdrop-filter: blur(5px);
 }
 
+.btn-outline-primary:disabled {
+  color: #484d6d;
+}
+
 .btn-outline-primary:hover {
   color: #fffcf9;
   border-color: #484d6d;
