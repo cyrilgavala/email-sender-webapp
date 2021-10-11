@@ -4,8 +4,8 @@ import {Button, Form, Modal, ProgressBar} from "react-bootstrap";
 import Papa from "papaparse";
 import Axios from 'axios'
 
-const api_url = process.env.API_URL || "http://localhost:3001/mail"
-const batchSize = process.env.BATCH_SIZE || 2
+const api_url = process.env.API_URL
+const batchSize = process.env.BATCH_SIZE
 
 function App() {
 
