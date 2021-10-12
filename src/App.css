@@ -1,76 +1,92 @@
 .App {
-  text-align: center;
-  background: linear-gradient(45deg, #484d6d, #D6AD60, #868B8E, #484d6d);
-  width: 100%;
-  height: 100vh;
-  position: relative;
+    text-align: center;
+    background: linear-gradient(45deg, #484d6d, #D6AD60, #868B8E, #484d6d);
+    width: 100%;
+    height: 100vh;
+    position: relative;
 }
 
 #main-container {
-  width: 80%;
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
+    width: 80%;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 }
 
 .row {
-  width: 100%;
-  margin-top: 20px;
-  display: inline-flex;
+    width: 100%;
+    margin-top: 20px;
+    display: inline-flex;
 }
 
 .progress {
-  padding: 0;
+    padding: 0;
 }
 
 .form-control-file {
-  width: 80%;
-  padding: 0;
+    width: 80%;
+    padding: 0;
 }
 
 #execute-btn {
-  width: 20%;
+    width: 20%;
 }
 
 #message {
-  width: 100%;
-  resize: vertical;
-  background: rgba(255,255,255,0.5);
-  backdrop-filter: blur(5px);
+    width: 100%;
+    resize: vertical;
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(5px);
 }
 
-#subject {
-  background: rgba(255,255,255,0.5);
-  backdrop-filter: blur(5px);
-  width: 100%;
+#subject, #headline {
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(5px);
+    width: 100%;
 }
 
 .modal-body {
-  background-color: #484d6d;
-  color: #fffcf9;
+    background-color: #484d6d;
+    color: #fffcf9;
 }
 
 .modal-header, .modal-footer {
-  color: #484d6d;
-  background-color: #fffcf9;
+    color: #484d6d;
+    background-color: #fffcf9;
 }
 
 .btn-outline-primary {
-  color: #484d6d;
-  border-color: #484d6d;
-  background: rgba(255,255,255,0.5);
-  backdrop-filter: blur(5px);
+    color: #484d6d;
+    border-color: #484d6d;
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(5px);
 }
 
 .btn-outline-primary:disabled {
-  color: #484d6d;
+    color: #484d6d;
 }
 
 .btn-outline-primary:hover {
-  color: #fffcf9;
-  border-color: #484d6d;
-  background-color: #484d6d;
+    color: #fffcf9;
+    border-color: #484d6d;
+    background-color: #484d6d;
+}
+
+#spinner-modal > div {
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+    height: 100px;
+    width: 100px;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+#spinner {
+    width: 100px;
+    height: 100px;
 }
