@@ -16,6 +16,19 @@
     transform: translate(-50%, -50%);
 }
 
+#user-panel {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+#user-panel button, #user-panel button div {
+    background-color: #ffffff80 !important;
+    color: #484d6d !important;
+}
+
 .row {
     width: 100%;
     margin-top: 20px;
@@ -38,30 +51,20 @@
 #message {
     width: 100%;
     resize: vertical;
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(5px);
 }
 
 #subject, #headline {
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(5px);
     width: 100%;
-}
-
-.modal-body {
-    background-color: #484d6d;
-    color: #fffcf9;
-}
-
-.modal-header, .modal-footer {
-    color: #484d6d;
-    background-color: #fffcf9;
 }
 
 .btn-outline-primary {
     color: #484d6d;
     border-color: #484d6d;
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(5px);
 }
 

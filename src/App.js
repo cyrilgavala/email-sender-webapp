@@ -1,45 +1,42 @@
 import './App.css';
 import React, {useState} from "react";
 import {Button, Form, Modal, Spinner} from "react-bootstrap";
+import {GoogleLogin, GoogleLogout} from "react-google-login"
 import Papa from "papaparse";
 import Axios from 'axios'
 
-const api_url = process.env.API_URL || "https://emailsender-api.herokuapp.com/mail"
-const batchSize = parseInt(process.env.BATCH_SIZE, 10) || 100
-const timeout = parseInt(process.env.TIMEOUT, 10) || 1800000
+const batchSize = parseInt(process.env.REACT_APP_BATCH_SIZE, 10)
+const timeout = parseInt(process.env.REACT_APP_TIMEOUT, 10)
+const client_id = process.env.REACT_APP_CLIENT_ID
 
-function App() {
+export default function App() {
 
-    const [showCredsModal, isCredsModalShown] = useState(true)
     const [headline, setHeadline] = useState("")
     const [subject, setSubject] = useState("")
     const [message, setMessage] = useState("")
     const [addresses, setAddresses] = useState([])
     const [isProcessing, setProcessing] = useState(false)
-    const [username, setUsername] = useState("")
-    const [password, setPassword] = useState("")
+    const [user, setUser] = useState({})
+    const [token, setToken] = useState({})
 
-    function clearState() {
+    const clearState = () => {
         setProcessing(false)
         setHeadline("")
         setSubject("")
         setMessage("")
+        setAddresses([])
     }
 
-    async function handleSend() {
+    const handleSend = async () => {
 
-        async function sendMail(addressesString) {
-            return await Axios.post(api_url, {
-                username: username,
-                password: password,
-                bcc: addressesString,
-                headline: headline,
-                subject: subject,
-                message: message,
-            }).then((response) => {
-                let accepted = response.data.accepted
-                let rejected = response.data.rejected
-                return {accepted: accepted, rejected: rejected}
+        const sendMail = async (addressesString) => {
+
+            const encodedMail = btoa("Content-Type: text/html; charset=\"UTF-8\"\nMIME-Version: 1.0\nContent-Transfer-Encoding: 7bit\n" +
+                `Subject: ${subject}\nFrom: ${headline}\nBcc: ${addressesString}\n\n${message}`
+            ).replace(/\+/g, '-').replace(/\//g, '_');
+            await Axios.post(`https://www.googleapis.com/gmail/v1/users/me/messages/send?access_token=${token.access_token}`,
+                {raw: encodedMail}).then((response) => {
+                console.log(response.data)
             }).catch(err => {
                 console.error(err)
                 clearState()
@@ -48,81 +45,72 @@ function App() {
         }
 
         setProcessing(true)
-        let accepted = 0
-        let rejected = 0
         const batches = []
         for (let i = 0, len = addresses.length; i < len; i += batchSize)
             batches.push(addresses.slice(i, i + batchSize));
         for (const value of batches) {
             const index = batches.indexOf(value);
-            const result = await sendMail(value.toString());
-            if (result !== undefined) {
-                accepted += result.accepted
-                rejected += result.rejected
-            }
+            await sendMail(value.toString());
             if (index < batches.length - 1)
                 await new Promise(r => setTimeout(r, timeout));
         }
         await clearState()
-        alert(`Process ended ${new Date().toLocaleString()}.\nAccepted: ${accepted}. Rejected: ${rejected}. Total ${addresses.length}`)
+        alert(`Process ended ${new Date().toLocaleString()}.`)
     }
 
-    function handleFileSubmit(event) {
-        const file = event.target.files[0]
-        Papa.parse(file, {
+    const handleFileSubmit = (event) => {
+        const fileFromEvent = event.target.files[0]
+        Papa.parse(fileFromEvent, {
             complete: function (results) {
                 setAddresses(results.data.map(item => item[0]))
             }
         })
     }
 
-    function onUsernameChange(event) {
-        event.preventDefault()
-        setUsername(event.target.value)
+    const onSuccess = (res) => {
+        setUser(res.profileObj)
+        setToken(res.tokenObj)
+        let refreshTiming = (res.tokenObj.expires_in || 3300) * 1000
+        const refreshToken = async () => {
+            const newAuthRes = await res.reloadAuthResponse()
+            refreshTiming = (newAuthRes.expires_in || 3300) * 1000
+            setTimeout(refreshToken, refreshTiming)
+        }
+        setTimeout(refreshToken, refreshTiming)
     }
 
-    function onPasswordChange(event) {
-        event.preventDefault()
-        setPassword(event.target.value)
+    const onFailure = (res) => {
+        console.error(res)
+    }
+
+    const handleLogOut = () => {
+        setUser({})
+        setToken({})
+        clearState()
     }
 
     return (
         <div className="App">
-            <Modal id={"creds-modal"} show={showCredsModal} backdrop="static" animation>
-                <Modal.Header>
-                    <Modal.Title>Credentials</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label>Email address</Form.Label>
-                        <Form.Control type="email" value={username} placeholder="Enter email"
-                                      onChange={e => onUsernameChange(e)}/>
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formBasicPassword">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" value={password} placeholder="Password"
-                                      onChange={e => onPasswordChange(e)}/>
-                    </Form.Group>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="outline-primary" onClick={e => {
-                        e.preventDefault();
-                        isCredsModalShown(false)
-                    }}>
-                        Confirm
-                    </Button>
-                </Modal.Footer>
-            </Modal>
             <Modal id={"spinner-modal"} show={isProcessing} backdrop="static" animation centered>
                 <Spinner id={"spinner"} animation="border" role="status" variant={"light"}>
                     <span className="visually-hidden">Loading...</span>
                 </Spinner>
             </Modal>
+            <div id={"user-panel"}>
+                {Object.keys(user).length === 0 &&
+                <GoogleLogin id={"login-btn"} clientId={client_id} buttonText={"Log in"} isSignedIn={true}
+                             cookiePolicy={"single_host_origin"} onSuccess={onSuccess} theme={"dark"}
+                             onFailure={onFailure} scope={"profile email https://mail.google.com/"}/>}
+                {Object.keys(user).length > 0 &&
+                <GoogleLogout id={"logout-btn"} clientId={client_id} buttonText={`Logout ${user.name}`}
+                              onLogoutSuccess={handleLogOut} theme={"dark"}/>}
+            </div>
             <div id="main-container">
                 <div className="row">
-                    <Form.Control type="file" disabled={isProcessing}
+                    <Form.Control type="file" accept={".csv"} disabled={isProcessing}
                                   onChange={event => handleFileSubmit(event)}/>
-                    <Button id="execute-btn" variant="outline-primary" disabled={addresses.length === 0 || isProcessing}
+                    <Button id="execute-btn" variant="outline-primary"
+                            disabled={addresses.length === 0 || isProcessing}
                             onClick={handleSend}>
                         {isProcessing ? "Sending..." : "Send"}
                     </Button>
@@ -146,5 +134,3 @@ function App() {
         </div>
     );
 }
-
-export default App;
