@@ -1,85 +1,138 @@
+body {
+    background: url("/images/background.jpg") no-repeat;
+    background-size: cover;
+}
+
 .App {
     text-align: center;
-    background: linear-gradient(45deg, #484d6d, #D6AD60, #868B8E, #484d6d);
+    align-items: stretch;
     width: 100%;
     height: 100vh;
-    position: relative;
+    position: center;
 }
 
 #main-container {
-    width: 80%;
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    display: grid;
+    justify-content: stretch;
+    align-content: center;
 }
 
 #user-panel {
     width: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-content: center;
     padding: 20px;
 }
 
+#user-panel button {
+    border-radius: 10px !important;
+}
+
 #user-panel button, #user-panel button div {
-    background-color: #ffffff80 !important;
-    color: #484d6d !important;
+    background-color: #26323880 !important;
+    color: #fff9c4 !important;
+    backdrop-filter: blur(5px);
+    border-radius: 10px !important;
 }
 
-.row {
+#user-panel > button:hover {
+    border: #fff9c4 1px solid !important;
+}
+
+#user-panel button span {
+    font-size: 14px !important;
+}
+
+#email-form-wrapper {
     width: 100%;
-    margin-top: 20px;
-    display: inline-flex;
+    padding-left: 10%;
+    padding-right: 10%;
 }
 
-.progress {
-    padding: 0;
+#email-form {
+    width: 100%;
+    display: grid;
+    justify-content: stretch;
 }
 
-.form-control-file {
-    width: 80%;
-    padding: 0;
+label {
+    color: #fff9c4;
+    text-align: left;
+    margin-bottom: 5px;
+    padding-left: 10px;
+    font-size: 12px;
 }
 
-#execute-btn {
+#subject, #headline, #message, #file {
+    background: #26323840;
+    backdrop-filter: blur(5px);
+    width: 100%;
+    border-radius: 10px;
+    border: #263238 1px solid;
+    color: #fff9c4;
+    margin-bottom: 20px;
+    padding: 10px;
+    font-size: 14px;
+}
+
+#file {
+    cursor: pointer;
+}
+
+#subject::placeholder, #headline::placeholder, #message::placeholder, #file::placeholder {
+    color: #fff9c4;
+}
+
+#subject:focus, #headline:focus, #message:focus, #file:focus {
+    border: #fff9c4 1px solid;
+    box-shadow: none;
+    outline: none;
+}
+
+#file::file-selector-button {
+    background: none;
+    box-shadow: none;
+    border: none;
+    color: #fff9c4;
+    cursor: pointer;
+    padding: 0 10px 0 0;
+}
+
+#btn-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#execute-btn, #reset-btn {
     width: 20%;
-}
-
-#message {
-    width: 100%;
-    resize: vertical;
-    background: rgba(255, 255, 255, 0.8);
+    box-shadow: none !important;
+    border: #263238 1px solid;
+    color: #fff9c4;
+    background: #26323840;
     backdrop-filter: blur(5px);
+    cursor: pointer;
+    border-radius: 10px;
+    font-size: 14px;
 }
 
-#subject, #headline {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(5px);
-    width: 100%;
+#execute-btn:disabled {
+    color: #fff9c450;
+    background-color: #26323840;
+    pointer-events: none;
+    cursor: not-allowed;
 }
 
-.btn-outline-primary {
-    color: #484d6d;
-    border-color: #484d6d;
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(5px);
-}
-
-.btn-outline-primary:disabled {
-    color: #484d6d;
-}
-
-.btn-outline-primary:hover {
-    color: #fffcf9;
-    border-color: #484d6d;
-    background-color: #484d6d;
+#execute-btn:hover, #reset-btn:hover {
+    color: #fff9c4;
+    border: #fff9c4 1px solid;
 }
 
 #spinner-modal > div {
-    background-color: rgba(0, 0, 0, 0);
+    background-color: #00000000;
     border: none;
     height: 100px;
     width: 100px;
