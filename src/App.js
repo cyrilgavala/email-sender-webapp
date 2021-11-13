@@ -28,9 +28,9 @@ export default function App() {
     }
 
     const handleLogOut = () => {
+        document.getElementById("email-form").reset();
         setUser({})
         setToken({})
-        document.getElementById("email-form").reset();
     }
 
     return (
@@ -44,9 +44,7 @@ export default function App() {
                 <GoogleLogout id={"logout-btn"} clientId={client_id} buttonText={`Logout ${user.name}`}
                               onLogoutSuccess={handleLogOut} theme={"dark"}/>}
             </div>
-            <div id="main-container">
-                <EmailForm token={token}/>
-            </div>
+            <EmailForm token={token}/>
         </div>
     );
 }

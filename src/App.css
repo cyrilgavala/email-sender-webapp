@@ -11,14 +11,6 @@ body {
     position: center;
 }
 
-#main-container {
-    width: 100%;
-    height: 100%;
-    display: grid;
-    justify-content: stretch;
-    align-content: center;
-}
-
 #user-panel {
     width: 100%;
     display: flex;
@@ -31,11 +23,15 @@ body {
     border-radius: 10px !important;
 }
 
-#user-panel button, #user-panel button div {
-    background-color: #26323880 !important;
+#user-panel button {
+    background: #26323840 !important;
     color: #fff9c4 !important;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(10px);
     border-radius: 10px !important;
+}
+
+#user-panel button div {
+    background: none !important;
 }
 
 #user-panel > button:hover {
@@ -48,14 +44,12 @@ body {
 
 #email-form-wrapper {
     width: 100%;
-    padding-left: 10%;
-    padding-right: 10%;
+    height: 100%;
+    padding: 10%;
 }
 
 #email-form {
     width: 100%;
-    display: grid;
-    justify-content: stretch;
 }
 
 label {
@@ -64,11 +58,12 @@ label {
     margin-bottom: 5px;
     padding-left: 10px;
     font-size: 12px;
+    width: 100%;
 }
 
 #subject, #headline, #message, #file {
     background: #26323840;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(10px);
     width: 100%;
     border-radius: 10px;
     border: #263238 1px solid;
@@ -83,7 +78,7 @@ label {
 }
 
 #subject::placeholder, #headline::placeholder, #message::placeholder, #file::placeholder {
-    color: #fff9c4;
+    color: #fff9c480;
 }
 
 #subject:focus, #headline:focus, #message:focus, #file:focus {
@@ -96,7 +91,7 @@ label {
     background: none;
     box-shadow: none;
     border: none;
-    color: #fff9c4;
+    color: #fff9c480;
     cursor: pointer;
     padding: 0 10px 0 0;
 }
@@ -113,7 +108,7 @@ label {
     border: #263238 1px solid;
     color: #fff9c4;
     background: #26323840;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(10px);
     cursor: pointer;
     border-radius: 10px;
     font-size: 14px;

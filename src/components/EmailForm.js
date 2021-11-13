@@ -14,9 +14,10 @@ export default function EmailForm(props) {
     const [message, setMessage] = useState("")
     const [addresses, setAddresses] = useState([])
 
-    const handleSend = async () => {
+    const handleSend = async (event) => {
+        event.preventDefault()
 
-        const sendMail = async (addressesString) => {
+        const sendMail = async (event, addressesString) => {
 
             const encodedMail = btoa("Content-Type: text/html; charset=\"UTF-8\"\nMIME-Version: 1.0\nContent-Transfer-Encoding: 7bit\n" +
                 `Subject: ${subject}\nFrom: ${headline}\nBcc: ${addressesString}\n\n${message}`
@@ -26,7 +27,7 @@ export default function EmailForm(props) {
                 console.log(response.data)
             }).catch(err => {
                 console.error(err)
-                clearState()
+                event.reset()
                 alert("Oops, something went wrong. Check out console output")
             })
         }
@@ -37,12 +38,14 @@ export default function EmailForm(props) {
             batches.push(addresses.slice(i, i + batchSize));
         for (const value of batches) {
             const index = batches.indexOf(value);
-            await sendMail(value.toString());
+            await sendMail(event, value.toString());
             if (index < batches.length - 1)
                 await new Promise(r => setTimeout(r, timeout));
         }
-        await clearState()
-        alert(`Process ended ${new Date().toLocaleString()}.`)
+        event.reset()
+        setProcessing(false)
+        setAddresses([])
+        console.log(`Process ended ${new Date().toLocaleString()}`)
     }
 
     const handleFileSubmit = (event) => {
@@ -52,12 +55,6 @@ export default function EmailForm(props) {
                 setAddresses(results.data.map(item => item[0]))
             }
         })
-    }
-
-    const clearState = () => {
-        setProcessing(false)
-        setAddresses([])
-        document.getElementById("email-form").reset();
     }
 
     return (
@@ -79,10 +76,10 @@ export default function EmailForm(props) {
                 <textarea id="message" rows="7" placeholder="Message" disabled={isProcessing} value={message}
                           onChange={event => setMessage(event.target.value)}/>
                 <div id={"btn-wrapper"}>
-                    <button id="reset-btn" onClick={clearState}>Reset</button>
-                    <button id="execute-btn"
+                    <button id="reset-btn" onClick={event => event.reset()}>Reset</button>
+                    <button id="execute-btn" type={"submit"}
                             disabled={props.token.access_token === undefined || addresses.length === 0 || isProcessing}
-                            onClick={handleSend}>
+                            onSubmit={handleSend}>
                         {isProcessing ? "Sending..." : "Send"}
                     </button>
                 </div>
